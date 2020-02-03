@@ -68,3 +68,30 @@ dev.off()
 source("http://jonsmitchell.com/code/plotFxn02b.R")
 pdf("r02b-cumulativeMilkByTime.pdf")
 #Disclaimer: I worked with Miriam on this because she did not have the correct instructions paper. If i heard correctly you did say we were allowed to work together.
+
+#Task 02c Starts here#
+#Hypothesis: The slope of the amount of milk young beren consumes in oz over time will positively correlate with the slope of how much Beren sleeps over time.
+setwd()
+beren3 <- read.csv("beren_new.csv", stringsAsFactors = F)
+
+Feeds <- which(beren3$event == "bottle")
+avgMilk <- mean(beren3$value[Feeds])
+avgMilk
+#The unit for avg milk is ounces#
+#COME BACK AND ANSWER THIS!!#
+#[] single brackets are used to gather a subset of data from an object which in this case is feed.#
+avgFeed <- tapply(beren3$value[Feeds], beren3$age[Feeds], mean)
+avgFeed
+varFeed <- tapply(beren3$value[Feeds], beren3$age[Feeds], var)
+totalFeed <- tapply(beren3$value[Feeds], beren3$age[Feeds], sum)
+numFeeds <- tapply(beren3$value[Feeds], beren3$age[Feeds], length)
+cor(beren3$value[Feeds], beren3$age[Feeds])
+cor.test(beren3$value[Feeds], beren3$age[Feeds])
+berenCor <- cor.test(beren3$value[Feeds], beren3$age[Feeds])
+summary(berenCor)
+berenANOVA <- aov(beren3$value[Feeds] ~ beren3$caregiver[Feeds])
+par(las=1, mar=c(5,5,1,1), mgp=c(2,0.5,0), tck=-0.01)
+plot(as.numeric(names(totalFeed)), totalFeed, type="b", pch=16, xlab="age in days", ylab="ounces of milk")
+abline(h=avgFeed, lty=2, col='red')
+pdf("r02b-totalMilkByDay.pdf", height = 4, width=4)
+dev.off()
